@@ -43,7 +43,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/revenue/" class="nav-link">
+                    <a href="{{route('revenue')}}" class="nav-link">
                         <i class="nav-icon fas fa-dollar-sign"></i>
                         <p data-translate="Dashboard">Revenue</p>
                     </a>
@@ -52,34 +52,34 @@
 
 
                 <li class="nav-item">
-                    <a href="/tax/" class="nav-link">
+                    <a href="{{route('tax')}}" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p data-translate="Dashboard">Tax</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/calendar/" class="nav-link">
+                    <a href="{{route('calender')}}" class="nav-link">
                         <i class="nav-icon fas fa-calendar"></i>
                         <p data-translate="Dashboard">Calendar</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/capital/" class="nav-link">
+                    <a href="{{route("showCapitalExpenditure")}}" class="nav-link">
                         <i class="nav-icon fas fa-chart-pie"></i>
                         <p data-translate="Dashboard">Capital expenditure</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/costs/" class="nav-link">
+                    <a href="{{route('costs')}}" class="nav-link">
                         <i class="nav-icon fas fa-credit-card"></i>
                         <p data-translate="Dashboard">Costs</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/map" class="nav-link">
+                    <a href="{{route('map')}}" class="nav-link">
                         <i class="nav-icon fas fa-map"></i>
                         <p data-translate="Dashboard">Map</p>
                     </a>
