@@ -165,7 +165,7 @@ if (
   return;
 } else {
   window.location.replace(
-    "/monthly/?year=" +
+    "{{route('monthlydata')}}/?year=" +
       year +
       "&month=" +
       month

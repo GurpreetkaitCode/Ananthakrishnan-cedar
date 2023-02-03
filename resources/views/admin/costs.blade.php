@@ -602,7 +602,7 @@
       return;
     } else {
       window.location.replace(
-        "/costs/?fromyear=" +
+        "{{route('costs')}}/?fromyear=" +
           fromYear +
           "&frommonth=" +
           fromMonth +
@@ -617,92 +617,5 @@
   function getParam(param) {
     return new URLSearchParams(window.location.search).get(param);
   }
-  // function generateChart() {
-  //   var d = JSON.parse(document.getElementById("all_costs").textContent);
-  //   // console.log(d);
-  //   costDic = {};
-  //   for (i = 0; i < d.length; i++) {
-  //     if (costDic.hasOwnProperty(d[i]["expense"]["typ"])) {
-  //       costDic[d[i]["expense"]["typ"]] += d[i]["amount"];
-  //     } else {
-  //       costDic[d[i]["expense"]["typ"]] = d[i]["amount"];
-  //     }
-  //   }
-
-  //   console.log(costDic);
-
-  //   var xValues = [],
-  //     yValues = [];
-
-  //   for (var property in costDic) {
-  //     if (!costDic.hasOwnProperty(property)) {
-  //       continue;
-  //     }
-
-  //     xValues.push(property);
-  //     yValues.push(costDic[property]);
-  //   }
-  //   // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-  //   // var yValues = [55, 49, 44, 24, 15];
-  //   var coloR = [];
-
-  //   var dynamicColors = function () {
-  //     var r = Math.floor(Math.random() * 255);
-  //     var g = Math.floor(Math.random() * 255);
-  //     var b = Math.floor(Math.random() * 255);
-  //     return "rgb(" + r + "," + g + "," + b + ")";
-  //   };
-
-  //   for (var i in yValues) {
-  //     coloR.push(dynamicColors());
-  //   }
-  //   new Chart("myChart", {
-  //     type: "pie",
-  //     data: {
-  //       labels: xValues,
-  //       datasets: [
-  //         {
-  //           backgroundColor: coloR,
-  //           data: yValues,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-       
-  //       title: {
-  //         display: true,
-  //         text: "Cost expenditure pie chart",
-  //       },
-  //       tooltips: {
-  //         callbacks: {
-  //           label: function (tooltipItem, data) {
-  //             var dataset = data.datasets[tooltipItem.datasetIndex];
-  //             var total = dataset.data.reduce(function (
-  //               previousValue,
-  //               currentValue,
-  //               currentIndex,
-  //               array
-  //             ) {
-  //               return previousValue + currentValue;
-  //             });
-  //             var currentValue = dataset.data[tooltipItem.index];
-  //             var percentage = Math.floor((currentValue / total) * 100 + 0.5);
-  //             // console.log(data.labels[tooltipItem.index])
-  //             return (
-  //               data.labels[tooltipItem.index] +
-  //               ": " +
-  //               String(currentValue) +
-  //               " (" +
-  //               percentage +
-  //               "%)"
-  //             );
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
-
-  // generateChart();
 </script>
 @endpush

@@ -28,6 +28,8 @@ class ImportController extends Controller
             $inEvent = false;
             while (!feof($file)) {
                 $line = fgets($file);
+                // echo '<pre>';
+                // print_r($line).'<br>';
                 if (strpos($line, "BEGIN:VEVENT") !== false) {
                     $inEvent = true;
                 } elseif (strpos($line, "END:VEVENT") !== false) {
@@ -44,8 +46,14 @@ class ImportController extends Controller
                     $adult = intval($occ[1] ?? '');
                     $child = intval($occ[2] ?? '');
                 }
-                Reservation::where('reservation_no', $reservationNo ?? '')->update(['adults' => $adult ?? '', 'children' => $child ?? '']);
+                Reservation::where('reservation_no', $reservationNo ?? null)->update(['adults' => $adult ?? null, 'children' => $child ?? null]);
+                $reserves = DB::table('reservation')
+                    ->select(DB::raw("SUM(DATEDIFF(check_out, check_in)) as totaldays"))->where('reservation_no', $reservationNo ?? null)
+                    ->value('totaldays');
+                Reservation::where('reservation_no', $reservationNo ?? null)->update(['total_days' => $reserves ?? null]);
             }
+            fclose($file);
+
             DB::commit();
             return back()->with('success', 'Uploaded successfully!');
         } catch (\Exception $e) {
@@ -54,5 +62,4 @@ class ImportController extends Controller
             return back()->with('error', 'Transaction failed. Error: ' . $error);
         }
     }
-
 }

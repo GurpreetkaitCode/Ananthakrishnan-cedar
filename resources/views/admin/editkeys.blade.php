@@ -144,17 +144,17 @@
                                                         </h1>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form novalidate action="{{route('updateKeys')}}" method="POST">
+                                                        <form action="{{route('updateKeys')}}" method="POST">
                                                             @csrf
                                                             <div class="form-group">
                                                                 <label for="checkin">Check In Time</label>
-                                                                <input type="time" class="time form-control" id="checkin"
+                                                                <input type="text" class="time form-control" id="checkin"
                                                                     name="check_in_time" aria-required="false">
                                                                 <input type="hidden" id="recordId" name="id">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="checkout">Check Out Time</label>
-                                                                <input type="time" class="time form-control" id="checkout"
+                                                                <input type="text" class="time form-control" id="checkout"
                                                                     name="check_out_time" aria-required="false">
                                                             </div>
                                                             <div class="modal-footer">
@@ -181,6 +181,7 @@
 </div>
 @endsection
 @push('styles')
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <style>
     .flex {
         margin-bottom: 10px;
@@ -322,7 +323,18 @@
 </style>
 @endpush
 @push('scripts')
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <script>
+    $(document).ready(function(){
+     $('.time').timepicker({
+        timeFormat: 'HH:mm:ss',
+        defaultTime: '00',
+        startTime: '00:00',
+        dynamic: true,
+        dropdown: true,
+        scrollbar: true
+     });
+    });
     $('.editModal').on('click', function () {
         $('#timeeditableModal').modal('show');
         let checkin = $(this).attr('data-checkin');
@@ -360,34 +372,25 @@
   function getParam(param) {
     return new URLSearchParams(window.location.search).get(param);
   }
-
-//   function enableKey(id){
-//       $.ajax({
-//       type: "POST",
-//       url: "{{route('klevio')}}",
-//       data: {
-//         id: id,
-//         sessionId:sessionId
-//       },
-//       success: function (data) {
-//         if (data.hasOwnProperty("error")) {
-//           toastr.clear();
-//           toastr.error(data["error"]);
-//         } else {
-//           toastr.clear();
-//           console.log(data);
-//           toastr.success("Key enabled successfully.");
-//           setTimeout(function () {
-//             window.location.reload();
-//           }, 2000);
-//         }
-//       },
-//       error: function (data) {
-//         console.log("Error!");
-//       },
-//     });
-    
-//   }
-
-</script>
 @endpush
+<form action="{{route('updateKeys')}}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="checkin">Check In Time</label>
+        <input type="text" class="time form-control" id="checkin"
+            name="check_in_time" aria-required="false">
+        <input type="hidden" id="recordId" name="id">
+    </div>
+    <div class="form-group">
+        <label for="checkout">Check Out Time</label>
+        <input type="text" class="time form-control" id="checkout"
+            name="check_out_time" aria-required="false">
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btnclose btn-secondary"
+            data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary"
+            id="updateKeys">Update
+            changes</button>
+    </div>
+</form>

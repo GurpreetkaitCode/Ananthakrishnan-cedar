@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="row" style="justify-content: center;">
                 <div class="mapimage">
-                    <img src="{{asset('static/'.$map[0]->map)}}" alt="" />
+                    <img src="{{asset('uploads/map/'.$map[0]->map)}}" alt="" />
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "firebase/php-jwt": "^6.3",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "kigkonsult/icalcreator": "^2.39",
@@ -13,8 +14,10 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
+        "paragonie/sodium_compat": "^1.19",
         "phpoffice/phpexcel": "^1.8",
-        "spatie/icalendar-generator": "^2.5"
+        "spatie/icalendar-generator": "^2.5",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

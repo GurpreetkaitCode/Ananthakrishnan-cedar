@@ -30,6 +30,8 @@ class Reservation extends Model
         'notes',
         'total_days',
         'currency',
+        'check_in_time',
+        'check_out_time',
     ];
 
     public function getCheckInAttribute($value)

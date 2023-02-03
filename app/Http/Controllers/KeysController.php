@@ -14,16 +14,27 @@ class KeysController extends Controller
     {
         $year = $request->year;
         $month = $request->month;
-
         if (!$year || !$month) {
             $allReserve = [];
         } else {
-            $dateFrom = Carbon::createFromFormat("d.m.Y", "01." . $month . "." . $year)->startOfDay();
-            $lastDayOfMonth = Carbon::createFromFormat("d.m.Y", $year . "-" . $month . "-01")->endOfMonth()->day;
-            $dateTo = Carbon::createFromFormat("d.m.Y", $lastDayOfMonth . "." . $month . "." . $year)->endOfDay();
-            $allReserve = Reservation::where("check_in", ">=", $dateFrom)
-                ->where("check_in", "<=", $dateTo)->get();
+            $from = Carbon::create($year, $month, 1, 0, 0, 0);
+            $to = Carbon::create($year, $month, 1, 0, 0, 0)->addMonth();
+            $allReserve = Reservation::whereBetween('check_in',[$from,$to])->get();
         }
-        return view("admin.keys", ["year" => $year, "month" => $month, "all_reserve" => $allReserve, "pagename" => "Key management", "name" => Auth::user()->name]);
+        $records = $allReserve;
+        return view("admin.keys", ["year" => $year, "month" => $month, "records" => $records, "pagename" => "Key management", "name" => Auth::user()->name]);
+    }
+
+    public function update(Request $request)
+    {
+        $record = Reservation::find($request->id);
+        try {
+            $record->check_in_time = $request->check_in_time;
+            $record->check_out_time = $request->check_out_time;
+            $record->save();
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+        return back()->with('success', 'Settings updated successfully');
     }
 }

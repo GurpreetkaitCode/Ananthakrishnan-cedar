@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Reservation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithFormatData;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -18,7 +19,11 @@ class RservationImports implements ToModel, WithHeadingRow, WithFormatData
      */
     public function model(array $row)
     {
-        // dd($row);
+        if (Reservation::where('reservation_no', $row['reservation_no'])->exists()) {
+            return null;
+        }
+        $check_out_time = DB::table('settings')->value('check_out_time');
+        $check_in_time = DB::table('settings')->value('check_in_time');
         $reservationNo  = $row['reservation_no'];
         $guest_first_name = $row['guest_first_name'];
         $guest_last_name = $row['guest_last_name'];
@@ -29,7 +34,7 @@ class RservationImports implements ToModel, WithHeadingRow, WithFormatData
         $check_in_date = date('Y-m-d', $check_in_date);
         $check_out_date = $row['check_out_date'];
         $check_out_date = PHPExcel_Shared_Date::ExcelToPHP($check_out_date);
-        $check_out_date = date('Y-m-d', $check_out_date);
+        $check_out_date = date('Y-m-d', $check_out_date) . $check_out_time;
         $room = $row['room'];
         $unit_no = $row['unit_no'];
         $subtotal = $row['subtotal'];
@@ -45,19 +50,21 @@ class RservationImports implements ToModel, WithHeadingRow, WithFormatData
             'guest_last_name' => $guest_last_name,
             'email' => $email,
             'country' => $country,
-            'check_in' => Carbon::parse($check_in_date)->format('Y-m-d'),
-            'check_out' => Carbon::parse($check_out_date)->format('Y-m-d'),
+            'check_in' => Carbon::parse($check_in_date)->format('Y-m-d H:i:s'),
+            'check_out' => Carbon::parse($check_out_date)->format('Y-m-d H:i:s'),
             'room' => $room,
             'unit_no' => $unit_no,
             'subtotal' => $subtotal,
             'revenue' => $revenue,
-            'create_date' => Carbon::parse($create_date)->format('Y-m-d'),
+            'create_date' => Carbon::parse($create_date)->format('Y-m-d H:i:s'),
             'sub_total' => $subtotal,
             'adults' => null,
             'children' => null,
             'notes' => null,
             'total_days' => null,
             'currency' => $currency,
+            'check_in_time' => $check_in_time,
+            'check_out_time' => $check_out_time,
         ]);
     }
 }

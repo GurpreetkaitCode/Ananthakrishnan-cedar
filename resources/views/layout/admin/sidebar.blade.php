@@ -4,11 +4,11 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="/static/img/logo.jpeg" class="img-circle elevation-2" alt="User Image" />
+                <img src="{{asset('static/img/avt.png')}}" class="img-circle elevation-2" alt="User Image" />
             </div>
             <div class="info">
-                <a href="/dashboard/" style="color: #000000;" class="d-block" data-translate="Admin panel">Hi,
-                    Name</a>
+                <a href="javascript:void(0)" style="color: #000000;" class="d-block" data-translate="Admin panel">Hi,
+                    {{Auth::user()->username}}</a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -29,14 +29,14 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/cleaning/" class="nav-link">
+                    <a href="{{route('cleaning')}}" class="nav-link">
                         <i class="nav-icon fas fa-broom"></i>
                         <p data-translate="Dashboard">Cleaning</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="/keys/" class="nav-link">
+                    <a href="{{route('keys')}}" class="nav-link">
                         <i class="nav-icon fas fa-key"></i>
                         <p data-translate="Dashboard">Keys</p>
                     </a>
@@ -92,6 +92,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{route('settings')}}" class="nav-link">
+                        <i class="nav-icon fas fa-edit"></i>
+                        <p data-translate="Logout">Settings</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{route('logout')}}" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt"></i>

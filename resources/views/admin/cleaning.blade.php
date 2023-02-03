@@ -1,6 +1,6 @@
 @extends('layout.admin.app')
-@section('title', 'Keys')
-@section('pagename','Keys Managmenet')
+@section('title', 'Cleaning')
+@section('pagename', 'Cleaning')
 @section('content')
 
 <div class="content-wrapper">
@@ -13,6 +13,7 @@
             <div id="errorsign" class="alert-box"></div>
         </div>
     </div>
+
     <div class="content">
         <div class="container">
             <main role="main" class="pb-3">
@@ -20,7 +21,7 @@
                     <div class="col-md-12 mx-auto">
                         <div class="card">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="text-uppercase text-center">Klevio Key Management</h5>
+                                <h5 class="text-uppercase text-center">Cleaning Schedule</h5>
                             </div>
                             <p style="color: red;"></p>
                             <p style="color: red;"></p>
@@ -31,21 +32,23 @@
                                     <div class="row">
                                         <div class="" style="width: 100%;">
                                             <div class="card">
+
+
                                                 <div class="searchfilters" id="searchfilters">
                                                     <div class="filtname" data-translate="Filters">
                                                         Date
                                                     </div>
-                                                    <input type="number" id="year1" class="filterbox" min="1900"
-                                                        max="2040" step="1" value="{{$year !== null ? $year : 2023}}" />
 
-                                                    <select class="filterbox" id="month1">
-                                                        <option value="1" {{$month==0 ? 'selected' : '' }}>--Select--
-                                                        </option>
+                                                    <input type="number" id="year1" class="filterbox" min="1900"
+                                                        max="2040" step="1" value="{{$year == "" ? 2023 : $year}}" />
+
+                                                    <select class="filterbox" id="month1" onchange="show_month()">
+                                                        <option selected value="">--Select Month--</option>
                                                         <option value="1" {{$month==1 ? 'selected' : '' }}>Janaury
                                                         </option>
                                                         <option value="2" {{$month==2 ? 'selected' : '' }}>
                                                             February</option>
-                                                        <option value="3" {{$month==3 ? 'selected' : '' }}>March
+                                                        <option value="3" {{$month==3? 'selected' : '' }}>March
                                                         </option>
                                                         <option value="4" {{$month==4 ? 'selected' : '' }}>April
                                                         </option>
@@ -80,13 +83,11 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>Id</th>
-                                                                    <th>Guest Name</th>
-                                                                    <th>Email</th>
                                                                     <th>Check In Date</th>
                                                                     <th>Check Out Date</th>
-                                                                    <th>Unit</th>
-                                                                    <th>Klevio Key</th>
-                                                                    <!-- <th>Actions</th> -->
+                                                                    <th>Num of Guests</th>
+                                                                    <th>Room Type</th>
+                                                                    <th>Notes</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -94,82 +95,46 @@
                                                                 @foreach($records as $record)
                                                                 <tr>
                                                                     <td>{{$record->id}}</td>
-                                                                    <td>{{$record->guest_first_name}}
-                                                                        {{$record->guest_last_name}}</td>
-                                                                    <td>{{$record->email}}</td>
-                                                                    <td>{{date('M. d,Y',strtotime($record->check_in))}}
-                                                                        {{$record->check_in_time}}
+                                                                    <td>{{date('Y-m-d',strtotime($record->check_in)) }}</td>
+                                                                    <td>{{date('Y-m-d',strtotime($record->check_out)) }}</td>
+                                                                    <td>adults/children
+                                                                        ({{$record->adults}}/{{$record->children}})
                                                                     </td>
-                                                                    <td>{{date('M. d,Y',strtotime($record->check_out))}}
-                                                                        {{$record->check_out_time}}
-                                                                    </td>
-                                                                    <td>{{$record->unit_no}}</td>
                                                                     <td>
-                                                                        @if($record->klevio_key == 1 )
-                                                                        Key Already Enabled
-                                                                        @else
-                                                                        <a href="{{route('klevio',$record->id)}}"
-                                                                            class="btn btn-primary"> Enable key</a>
-                                                                        <button class="btn btn-warning editModal"
-                                                                            data-checkin="{{$record->check_in_time}}"
-                                                                            data-checkout="{{$record->check_out_time}}"
-                                                                            data-id="{{$record->id}}"> Edit
-                                                                        </button>
+                                                                        {{$record->room}}
                                                                     </td>
-                                                                    @endif
+                                                                    <td style="display: flex; align-items: center;">
+                                                                        <form action="{{route('addNotes')}}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <textarea
+                                                                                style="max-height: 130px;min-height: 35px;"
+                                                                                class="filterbox" type="text"
+                                                                                name="notes" placeholder="Notes">
+                                                                                {{$record->notes}}
+                                                                            </textarea>
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{$record->id}}">
+                                                                            <button class="filterbut"
+                                                                                type="submit">Save</button>
+                                                                        </form>
                                                                     </td>
                                                                 </tr>
                                                                 @endforeach
-                                                                @else
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center">No data
-                                                                        available</td>
-                                                                </tr>
                                                                 @endif
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
+                                                {{-- <div class="dialog">No data available</div> --}}
                                             </div>
-                                        </div>
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="timeeditableModal" tabindex="-1"
-                                            aria-labelledby="timeeditableModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="timeeditableModalLabel">Modal
-                                                            title
-                                                        </h1>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form novalidate action="{{route('updateKeys')}}" method="POST">
-                                                            @csrf
-                                                            <div class="form-group">
-                                                                <label for="checkin">Check In Time</label>
-                                                                <input type="time" class="time form-control" id="checkin"
-                                                                    name="check_in_time" aria-required="false">
-                                                                <input type="hidden" id="recordId" name="id">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="checkout">Check Out Time</label>
-                                                                <input type="time" class="time form-control" id="checkout"
-                                                                    name="check_out_time" aria-required="false">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btnclose btn-secondary"
-                                                                    data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary"
-                                                                    id="updateKeys">Update
-                                                                    changes</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <!-- /.card -->
                                         </div>
+                                        <!-- /.col-md-6 -->
                                     </div>
+
+                                    <!-- /.container-fluid -->
                                 </div>
                             </div>
                         </div>
@@ -323,18 +288,6 @@
 @endpush
 @push('scripts')
 <script>
-    $('.editModal').on('click', function () {
-        $('#timeeditableModal').modal('show');
-        let checkin = $(this).attr('data-checkin');
-        let checkout = $(this).attr('data-checkout');
-        let id = $(this).attr('data-id');
-        $('#checkin').val(checkin);
-        $('#checkout').val(checkout);
-        $('#recordId').val(id);
-    });
-    $('.btnclose').on('click', function () {
-        $('#timeeditableModal').modal('hide');
-    });
     function searchTeam(event) {
     event.preventDefault();
     var year = document.getElementById("year1").value;
@@ -349,7 +302,7 @@
       return;
     } else {
       window.location.replace(
-        "{{route('keys')}}/?year=" +
+        "{{route('cleaning')}}/?year=" +
           year +
           "&month=" +
           month
@@ -360,34 +313,5 @@
   function getParam(param) {
     return new URLSearchParams(window.location.search).get(param);
   }
-
-//   function enableKey(id){
-//       $.ajax({
-//       type: "POST",
-//       url: "{{route('klevio')}}",
-//       data: {
-//         id: id,
-//         sessionId:sessionId
-//       },
-//       success: function (data) {
-//         if (data.hasOwnProperty("error")) {
-//           toastr.clear();
-//           toastr.error(data["error"]);
-//         } else {
-//           toastr.clear();
-//           console.log(data);
-//           toastr.success("Key enabled successfully.");
-//           setTimeout(function () {
-//             window.location.reload();
-//           }, 2000);
-//         }
-//       },
-//       error: function (data) {
-//         console.log("Error!");
-//       },
-//     });
-    
-//   }
-
 </script>
 @endpush

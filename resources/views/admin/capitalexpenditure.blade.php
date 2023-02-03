@@ -613,7 +613,7 @@
       return;
     } else {
       window.location.replace(
-        "/capitalexpenditure/?fromyear=" +
+        "{{route('showCapitalExpenditure')}}/?fromyear=" +
           fromYear +
           "&frommonth=" +
           fromMonth +

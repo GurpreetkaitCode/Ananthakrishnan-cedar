@@ -28,6 +28,7 @@ class CostController extends Controller
             $tomonth = $request->tomonth;
         } else {
             $expenses = ExpenseModel::where('expensecategory_id', 1)->with('getExpenseType')->get();
+            // dd($expenses);
         }
         return view('admin.costs', compact('costCategories', 'expensestypes', 'expenses', 'fromyear', 'frommonth', 'toyear', 'tomonth'));
     }
@@ -41,5 +42,4 @@ class CostController extends Controller
         return back()->with('success', 'Expense Deleted Successfully');
     }
 
-    
 }
