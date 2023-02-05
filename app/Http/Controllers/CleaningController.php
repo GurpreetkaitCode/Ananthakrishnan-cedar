@@ -20,7 +20,9 @@ class CleaningController extends Controller
             $to = Carbon::createFromDate($year, $month, 1)->endOfMonth();
             $records = DB::table('reservation')->whereBetween('check_in',[$from,$to])->orderBy('check_in')->get();
         } else {
-            $records = [];
+            $year = date("Y");
+            $month = date("m");
+            $records = DB::table('reservation')->whereYear('check_in', $year)->whereMonth('check_in', $month)->orderBy('check_in')->get();
         }
         return view('admin.cleaning', compact('records', 'year', 'month'));
     }

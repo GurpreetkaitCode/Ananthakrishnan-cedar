@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::controller(MonthlyDataController::class)->group(function () {
         Route::get('/monthly', 'show')->name('monthlydata');
+        Route::post('/monthly/update', 'update')->name('updateMonthlyData');
         // Route::post('/upload-data', 'importExcel')->name('importExcel');
     });
     Route::controller(ImportController::class)->group(function () {
@@ -72,7 +73,9 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::controller(KlevioApiController::class)->group(function () {
         Route::get('/klevio/{id?}', 'callApi')->name('klevio');
+        Route::get('/klevio/disable/{id?}', 'callDisableApi')->name('kleviodisable');
     });
+    
     Route::controller(AdminController::class)->group(function () {
         Route::get('/settings', 'show')->name('settings');
         Route::post('/settings', 'update')->name('updateSettings');

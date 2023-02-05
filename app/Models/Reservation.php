@@ -32,6 +32,8 @@ class Reservation extends Model
         'currency',
         'check_in_time',
         'check_out_time',
+        'klevio_id',
+        'key_id',
     ];
 
     public function getCheckInAttribute($value)

@@ -55,7 +55,7 @@
                           <select class="filterbox" id="month1" name="frommonth" onchange="show_month()">
                             <option selected value="">--Select Month--</option>
                             <option value="1" {{$frommonth==1 ? 'selected' : '' }}>
-                              Janaury</option>
+                              January </option>
                             <option value="2" {{$frommonth==2 ? 'selected' : '' }}>
                               February</option>
                             <option value="3" {{$frommonth==3 ? 'selected' : '' }}>
@@ -87,7 +87,7 @@
                           <select class="filterbox" id="month2" onchange="show_month()">
                             <option selected value="">--Select Month--</option>
                             <option value="1" {{$tomonth==1 ? 'selected' : '' }}>
-                              Janaury</option>
+                              January </option>
                             <option value="2" {{$tomonth==2 ? 'selected' : '' }}>
                               February</option>
                             <option value="3" {{$tomonth==3 ? 'selected' : '' }}>
@@ -299,7 +299,7 @@
               max="2040" step="1" value="2022" />
             <select style="width: 100%; margin-right: 0; max-width: 100%;" name="month" class="filterbox" id="month3">
               <option selected value="">--Select Month--</option>
-              <option value="1">Janaury</option>
+              <option value="1">January </option>
               <option value="2">February</option>
               <option value="3">March</option>
               <option value="4">April</option>

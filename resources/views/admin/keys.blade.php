@@ -41,7 +41,7 @@
                                                     <select class="filterbox" id="month1">
                                                         <option value="1" {{$month==0 ? 'selected' : '' }}>--Select--
                                                         </option>
-                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>Janaury
+                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>January 
                                                         </option>
                                                         <option value="2" {{$month==2 ? 'selected' : '' }}>
                                                             February</option>
@@ -86,7 +86,6 @@
                                                                     <th>Check Out Date</th>
                                                                     <th>Unit</th>
                                                                     <th>Klevio Key</th>
-                                                                    <!-- <th>Actions</th> -->
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -97,16 +96,20 @@
                                                                     <td>{{$record->guest_first_name}}
                                                                         {{$record->guest_last_name}}</td>
                                                                     <td>{{$record->email}}</td>
-                                                                    <td>{{date('M. d,Y',strtotime($record->check_in))}}
-                                                                        {{$record->check_in_time}}
+                                                                    <td>{{date('d',strtotime($record->check_in))}}
                                                                     </td>
-                                                                    <td>{{date('M. d,Y',strtotime($record->check_out))}}
-                                                                        {{$record->check_out_time}}
+                                                                    <td>{{date('d',strtotime($record->check_out))}}
                                                                     </td>
                                                                     <td>{{$record->unit_no}}</td>
                                                                     <td>
                                                                         @if($record->klevio_key == 1 )
-                                                                        Key Already Enabled
+                                                                        <a href="{{route('kleviodisable',$record->id)}}"
+                                                                            class="btn btn-primary"> Disable key</a>
+                                                                        <button class="btn btn-warning editModal"
+                                                                            data-checkin="{{$record->check_in_time}}"
+                                                                            data-checkout="{{$record->check_out_time}}"
+                                                                            data-id="{{$record->id}}"> Edit
+                                                                        </button>
                                                                         @else
                                                                         <a href="{{route('klevio',$record->id)}}"
                                                                             class="btn btn-primary"> Enable key</a>
@@ -139,8 +142,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="timeeditableModalLabel">Modal
-                                                            title
+                                                        <h1 class="modal-title fs-5" id="timeeditableModalLabel">Edit Keys Data
                                                         </h1>
                                                     </div>
                                                     <div class="modal-body">
@@ -153,7 +155,7 @@
                                                                 <input type="hidden" id="recordId" name="id">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="checkout">Check Out Time</label>
+                                              {{-- <label for="checkout">Check Out Time</label> --}}
                                                                 <input type="time" class="time form-control" id="checkout"
                                                                     name="check_out_time" aria-required="false">
                                                             </div>

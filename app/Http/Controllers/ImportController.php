@@ -24,36 +24,40 @@ class ImportController extends Controller
         try {
             DB::beginTransaction();
             Excel::import(new RservationImports, $file);
-            $file = fopen($icsfile, "r");
-            $inEvent = false;
-            while (!feof($file)) {
-                $line = fgets($file);
-                // echo '<pre>';
-                // print_r($line).'<br>';
-                if (strpos($line, "BEGIN:VEVENT") !== false) {
-                    $inEvent = true;
-                } elseif (strpos($line, "END:VEVENT") !== false) {
-                    $inEvent = false;
-                }
-                if ($inEvent && strpos($line, "SUMMARY:") !== false) {
-                    preg_match("/occupancy: (.*) \((.*)\)/", $line, $occ);
-                    preg_match("/Reservation: #(.*)\,/", $line, $reservation);
-                    $reservationNo = intval($reservation[1] ?? '');
-                }
-                if ($inEvent && strpos($line, "cy:") !== false) {
-                    preg_match("/adults\children: (.*) \((.*)\)/", $line, $occ);
-                    preg_match("/adults\/children \((.*)\/(.*)\)/", $line, $occ);
-                    $adult = intval($occ[1] ?? '');
-                    $child = intval($occ[2] ?? '');
-                }
-                Reservation::where('reservation_no', $reservationNo ?? null)->update(['adults' => $adult ?? null, 'children' => $child ?? null]);
-                $reserves = DB::table('reservation')
-                    ->select(DB::raw("SUM(DATEDIFF(check_out, check_in)) as totaldays"))->where('reservation_no', $reservationNo ?? null)
-                    ->value('totaldays');
-                Reservation::where('reservation_no', $reservationNo ?? null)->update(['total_days' => $reserves ?? null]);
-            }
-            fclose($file);
+            $content = file_get_contents($icsfile);
+            $content = explode("BEGIN:VEVENT", trim($content));
+            if ($content) {
+                $reservation_number = null;
+                $adult = 0;
+                $child = 0;
+                $description = null;
+                foreach ($content as $key => $value) {
+                    if ($key == 0) continue;
+                    $summary = explode("SUMMARY:", trim($value));
 
+                    foreach ($summary as $key => $line) {
+                        if ($key == 0) continue;
+                        if (preg_match('/Reservation: #(\d+)/', $line, $matches)) {
+                            $reservation_number = $matches[1];
+                        }
+                        if (strpos($line, "cy:") !== false) {
+                            preg_match("/adults\children: (.*) \((.*)\)/", $line, $occ);
+                            preg_match("/adults\/children \((.*)\/(.*)\)/", $line, $occ);
+                            $adult = intval($occ[1] ?? '');
+                            $child = intval($occ[2] ?? '');
+                        }
+                        if (strpos($line, "DESCRIPTION:") !== false) {
+                            preg_match("/DESCRIPTION:(.*)/", $line, $desc);
+                            $description = $desc[1] ?? '';
+                        }
+                    }
+                    $this->processReservation($reservation_number, $adult, $child, $description);
+                    $description = null;
+                    $adult = 0;
+                    $child = 0;
+                    $reservation_number = null;
+                }
+            }
             DB::commit();
             return back()->with('success', 'Uploaded successfully!');
         } catch (\Exception $e) {
@@ -61,5 +65,12 @@ class ImportController extends Controller
             $error = $e->getMessage();
             return back()->with('error', 'Transaction failed. Error: ' . $error);
         }
+    }
+    function processReservation($reservationNo, $adult, $child, $description)
+    {
+        $reserves = DB::table('reservation')
+            ->select(DB::raw("SUM(DATEDIFF(check_out, check_in)) as totaldays"))->where('reservation_no', $reservationNo ?? null)
+            ->value('totaldays');
+        Reservation::where('reservation_no', $reservationNo ?? null)->update(['adults' => $adult ?? 0, 'children' => $child ?? 0, 'total_days' => $reserves ?? null, 'notes' => $description ?? null]);
     }
 }

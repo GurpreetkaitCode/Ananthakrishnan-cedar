@@ -19,16 +19,17 @@ class MonthlyDataController extends Controller
         $year = $request->input("year");
         $month = $request->input("month");
 
-        if ($year == null || $month == null) {
+        if ($year == null || $month == null) { 
             $year = date("Y");
-            $allReserve = [];
+            $month = date("m");
+            $allReserve = Reservation::whereMonth('check_in', $month)->whereYear('check_in', $year)->orderBy('check_in')->get();
         } else {
             // dd([$year, $month]);
             $year = (int)$year;
             $month = (int)$month;
             $date_from = date("Y-m-d", strtotime("$year-$month-01"));
             $date_to = date("Y-m-d", strtotime("$year-$month-31"));
-            $allReserve = Reservation::whereBetween('check_in', [$date_from, $date_to])->get();
+            $allReserve = Reservation::whereBetween('check_in', [$date_from, $date_to])->orderBy('check_in')->get();
         }
 
         return view('admin.monthlydata', [
@@ -37,5 +38,21 @@ class MonthlyDataController extends Controller
             "reservations" => $allReserve,
             "pagename" => "Monthly data",
         ]);
+    }
+
+    public function update(Request $request)
+    {
+        request()->validate([
+            'revenue' => 'required',
+        ]);
+
+        $revenue = $request->input("revenue");
+        $id = $request->input("id");
+
+        $reservation = Reservation::find($id);
+        $reservation->revenue = $revenue;
+        $reservation->save();
+
+        return back()->with('success', 'Monthly data updated successfully');
     }
 }

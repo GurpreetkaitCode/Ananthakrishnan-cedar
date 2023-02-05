@@ -41,7 +41,7 @@
                                                     <select class="filterbox" id="month1">
                                                         <option value="1" {{$month==0 ? 'selected' : '' }}>--Select--
                                                         </option>
-                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>Janaury
+                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>January 
                                                         </option>
                                                         <option value="2" {{$month==2 ? 'selected' : '' }}>
                                                             February</option>

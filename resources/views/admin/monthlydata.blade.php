@@ -46,7 +46,7 @@
 
                                                     <select class="filterbox" id="month1">
                                                         <option value="">--Select Month--</option>
-                                                        <option value="1" {{$month==1? 'selected' : '' }}>Janaury
+                                                        <option value="1" {{$month==1? 'selected' : '' }}>January
                                                         </option>
                                                         <option value="2" {{$month==2? 'selected' : '' }}>February
                                                         </option>
@@ -92,7 +92,8 @@
                                                                     <th>Unit</th>
                                                                     <th>Income</th>
                                                                     <th>Days</th>
-                                                                    <!-- <th>Actions</th> -->
+
+                                                                    <th>Actions</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -103,12 +104,37 @@
                                                                     <td>{{$item->guest_last_name}}</td>
                                                                     <td>{{$item->email}}</td>
                                                                     <td>{{$item->country}}</td>
-                                                                    <td>{{$item->check_in}}</td>
-                                                                    <td>{{$item->check_out}}</td>
+                                                                    <td>{{date('d',strtotime($item->check_in))}}</td>
+                                                                    <td>{{date('d',strtotime($item->check_out))}}</td>
                                                                     <td>{{$item->room}}</td>
                                                                     <td>{{$item->unit_no}} </td>
                                                                     <td>{{$item->revenue}}</td>
                                                                     <td>{{$item->total_days}}</td>
+                                                                    <td>
+                                                                        <button type="button"
+                                                                            class="btn btn-primary edit_income_btn"
+                                                                            data-revenue="{{$item->revenue}}"
+                                                                            data-recordid="{{$item->id}}">Edit</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-warning view_monthly_data_btn"
+                                                                            data-revenue="{{$item->revenue}}"
+                                                                            data-reservation-number="#{{$item->reservation_no}}"
+                                                                            data-notes="{{$item->notes}}"
+                                                                            data-createdat="{{$item->created_at}}"
+                                                                            data-currency="{{$item->currency}}"
+                                                                            data-guest-first-name="{{$item->guest_first_name}}"
+                                                                            data-guest-last-name="{{$item->guest_last_name}}"
+                                                                            data-email="{{$item->email}}"
+                                                                            data-country="{{$item->country}}"
+                                                                            data-check-in="{{$item->check_in}}"
+                                                                            data-check-out="{{$item->check_out}}"
+                                                                            data-room="{{$item->room}}"
+                                                                            data-unit-no="{{$item->unit_no}}"
+                                                                            data-total-days="{{$item->total_days}}"
+                                                                            data-adults="{{$item->adults}}"
+                                                                            data-children="{{$item->children}}"
+                                                                            data-recordid="{{$item->id}}">View</button>
+                                                                    </td>
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -119,12 +145,117 @@
                                                 <div class="dialog">No data available</div>
                                                 @endif
                                             </div>
-                                            <!-- /.card -->
                                         </div>
-                                        <!-- /.col-md-6 -->
                                     </div>
-
-                                    <!-- /.container-fluid -->
+                                    <div class="modal fade" id="editRevenueModal" tabindex="-1"
+                                        aria-labelledby="editRevenueModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="editRevenueModalLabel">
+                                                        Edit Revenue
+                                                    </h1>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{route('updateMonthlyData')}}" method="POST">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label for="incomeeditable">Income</label>
+                                                            <input type="number" class="time form-control"
+                                                                id="incomeeditable" name="revenue" aria-required="false"
+                                                                required>
+                                                            <input type="hidden" id="recordId" name="id">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary"
+                                                                id="updateKeys">Update changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- VIEW ALL DATA MODEl --}}
+                                    <div class="modal fade" id="viewMonthlyDataModal" tabindex="-1"
+                                        aria-labelledby="viewMonthlyDataModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="viewMonthlyDataModalLabel">
+                                                        View Data
+                                                    </h1>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Column</th>
+                                                                <th scope="col">Data</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Reservation Number</th>
+                                                                <th scope="row" id="reservationNumber">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">First Name</th>
+                                                                <th scope="row" id="firstName">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Last Name</th>
+                                                                <th scope="row" id="lastName">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Country</th>
+                                                                <th scope="row" id="country">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Email</th>
+                                                                <th scope="row" id="email">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Room</th>
+                                                                <th scope="row" id="room">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Unit Number</th>
+                                                                <th scope="row" id="unitNumber">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Revenue</th>
+                                                                <th scope="row" id="revenue">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Check In Date</th>
+                                                                <th scope="row" id="checkInDate">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Check Out Date</th>
+                                                                <th scope="row" id="checkOutDate">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Adults</th>
+                                                                <th scope="row" id="adults">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Children</th>
+                                                                <th scope="row" id="children">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Notes</th>
+                                                                <th scope="row" id="notes">1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Total Days</th>
+                                                                <th scope="row" id="totalDays">1</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -137,6 +268,45 @@
 @endsection
 @push('scripts')
 <script>
+    $('.view_monthly_data_btn').click(function(){
+        var revenue = $(this).data('revenue');
+        var guestFirstName = $(this).data('guest-first-name');
+        var guestLastName = $(this).data('guest-last-name');
+        var email = $(this).data('email');
+        var country = $(this).data('country');
+        var checkIn = $(this).data('check-in');
+        var checkOut = $(this).data('check-out');
+        var room = $(this).data('room');
+        var unitNo = $(this).data('unit-no');
+        var totalDays = $(this).data('total-days');
+        var adults = $(this).data('adults');
+        var children = $(this).data('children');
+        var notes = $(this).data('notes');
+        var reservationNumber = $(this).data('reservation-number');
+        $('#reservationNumber').text(reservationNumber);
+        $('#firstName').text(guestFirstName);
+        $('#lastName').text(guestLastName);
+        $('#country').text(country);
+        $('#email').text(email);
+        $('#room').text(room);
+        $('#unitNumber').text(unitNo);
+        $('#checkInDate').text(checkIn);
+        $('#checkOutDate').text(checkOut);
+        $('#revenue').text(revenue);
+        $('#adults').text(adults);
+        $('#children').text(children);
+        $('#notes').text(notes);
+        $('#totalDays').text(totalDays);
+
+        $('#viewMonthlyDataModal').modal('show');
+    });
+    $('.edit_income_btn').click(function(){
+        var revenue = $(this).data('revenue');
+        var recordId = $(this).data('recordid');
+        $('#incomeeditable').val(revenue);
+        $('#recordId').val(recordId);
+        $('#editRevenueModal').modal('show');
+    });
     var sessionId = getCookie("session_id_$cedar");
 sessionId = sessionId.slice(1, -1);
 function getCookie(name) {

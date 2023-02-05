@@ -76,7 +76,7 @@
                                 value="@if($fromyear){{$fromyear}}@else {{'2023'}} @endif" />
                               <select class="filterbox" id="month2">
                                 <option {{$frommonth=='' ? 'selected' : '' }} value="">--Select Month--</option>
-                                <option value="1" {{$frommonth==1 ? 'selected' : '' }}>Janaury</option>
+                                <option value="1" {{$frommonth==1 ? 'selected' : '' }}>January </option>
                                 <option value="2" {{$frommonth==2 ? 'selected' : '' }}>February</option>
                                 <option value="3" {{$frommonth==3 ? 'selected' : '' }}>March</option>
                                 <option value="4" {{$frommonth==4 ? 'selected' : '' }}>April</option>
@@ -97,7 +97,7 @@
 
                               <select class="filterbox" id="month3">
                                 <option {{$tomonth=='' ? 'selected' : '' }} value="">--Select Month--</option>
-                                <option value="1" {{$tomonth==1 ? 'selected' : '' }}>Janaury</option>
+                                <option value="1" {{$tomonth==1 ? 'selected' : '' }}>January </option>
                                 <option value="2" {{$tomonth==2 ? 'selected' : '' }}> February</option>
                                 <option value="3" {{$tomonth==3 ? 'selected' : '' }}>March</option>
                                 <option value="4" {{$tomonth==4 ? 'selected' : '' }}>April</option>

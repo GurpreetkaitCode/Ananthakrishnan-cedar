@@ -44,7 +44,7 @@
 
                                                     <select class="filterbox" id="month1" onchange="show_month()">
                                                         <option selected value="">--Select Month--</option>
-                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>Janaury
+                                                        <option value="1" {{$month==1 ? 'selected' : '' }}>January 
                                                         </option>
                                                         <option value="2" {{$month==2 ? 'selected' : '' }}>
                                                             February</option>
@@ -95,8 +95,8 @@
                                                                 @foreach($records as $record)
                                                                 <tr>
                                                                     <td>{{$record->id}}</td>
-                                                                    <td>{{date('Y-m-d',strtotime($record->check_in)) }}</td>
-                                                                    <td>{{date('Y-m-d',strtotime($record->check_out)) }}</td>
+                                                                    <td>{{date('d',strtotime($record->check_in)) }}</td>
+                                                                    <td>{{date('d',strtotime($record->check_out)) }}</td>
                                                                     <td>adults/children
                                                                         ({{$record->adults}}/{{$record->children}})
                                                                     </td>

@@ -15,7 +15,9 @@ class KeysController extends Controller
         $year = $request->year;
         $month = $request->month;
         if (!$year || !$month) {
-            $allReserve = [];
+            $year = date("Y");
+            $month = date("m");
+            $allReserve = Reservation::whereYear('check_in', $year)->whereMonth('check_in', $month)->get();
         } else {
             $from = Carbon::create($year, $month, 1, 0, 0, 0);
             $to = Carbon::create($year, $month, 1, 0, 0, 0)->addMonth();

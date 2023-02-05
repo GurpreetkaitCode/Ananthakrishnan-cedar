@@ -70,7 +70,7 @@
                                                             <option {{$frommonth==0 ? 'selected' : '' }} value="">
                                                                 --Select Month--</option>
                                                             <option {{$frommonth==1 ? 'selected' : '' }} value="1">
-                                                                Janaury</option>
+                                                                January </option>
                                                             <option {{$frommonth==2 ? 'selected' : '' }} value="2">
                                                                 February</option>
                                                             <option {{$frommonth==3 ? 'selected' : '' }} value="3">March
@@ -105,7 +105,7 @@
                                                         <select class="filterbox" id="month3" onchange="show_month()">
                                                             <option {{$tomonth==0 ? 'selected' : '' }} value="">--Select
                                                                 Month--</option>
-                                                            <option {{$tomonth==1 ? 'selected' : '' }} value="1">Janaury
+                                                            <option {{$tomonth==1 ? 'selected' : '' }} value="1">January 
                                                             </option>
                                                             <option {{$tomonth==2 ? 'selected' : '' }} value="2">
                                                                 February</option>
