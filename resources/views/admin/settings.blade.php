@@ -58,14 +58,13 @@
                                                     <label for="check_in" class="form-lable">Default Check In
                                                         Time</label>
                                                     <input type="time" class="form-control w-25" id="check_in"
-                                                        name="check_in_time" value="{{$settings[0]->check_in_time?? ''}}" placeholder="Enter new check in time">
-
+                                                        name="check_in_time" value="{{$settings[0]->check_in_time ?? '00:00'}}" step="3600" placeholder="Enter new check in time">
                                                 </div>
                                                 <div class="col-lg-12">
                                                     <label for="check_out" class="form-lable">Default Check Out
                                                         Time</label>
                                                         <input type="time" class="form-control w-25" id="check_out"
-                                                        name="check_out_time" value="{{$settings[0]->check_out_time?? ''}}" placeholder="Enter new check in time">
+                                                        name="check_out_time" value="{{$settings[0]->check_out_time?? '00:00'}}" step="3600" placeholder="Enter new check in time">
                                                 </div>
                                                 <div class="col-lg-12 mt-3">
                                                     <button class="btn btn-warning">Update</button>
