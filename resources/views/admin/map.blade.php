@@ -16,7 +16,12 @@
         <div class="container-fluid">
             <div class="row" style="justify-content: center;">
                 <div class="">
-                    <img src="{{asset('uploads/map/'.$map[0]->map)}}" alt="" class="img-fluid" />
+                    @if(is_array($map) &&  $map)
+                        @if(array_key_exists(0,$map))
+                            <img src="{{asset('uploads/map/'.$map[0]->map)}}" alt="" class="img-fluid" />
+                        @endif
+                    @endif
+
                 </div>
             </div>
         </div>

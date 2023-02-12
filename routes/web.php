@@ -23,7 +23,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/test', function () {
+    return view('login');
+});
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -43,6 +45,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/monthly', 'show')->name('monthlydata');
         Route::post('/monthly/update', 'update')->name('updateMonthlyData');
         // Route::post('/upload-data', 'importExcel')->name('importExcel');
+        Route::get('/monthly/{id}/delete',function ($id){
+            try {
+                \App\Models\Reservation::destroy($id);
+                return back()->with('success','Deleted Successfully');
+            }catch (Exception $e){
+                return back()->with('error',$e->getMessage());
+            }
+        })->name('deleteMonthlyData');
     });
     Route::controller(ImportController::class)->group(function () {
         Route::post('/upload-data', 'importExcel')->name('importExcelIcs');
@@ -75,7 +85,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/klevio/{id?}', 'callApi')->name('klevio');
         Route::get('/klevio/disable/{id?}', 'callDisableApi')->name('kleviodisable');
     });
-    
+
     Route::controller(AdminController::class)->group(function () {
         Route::get('/settings', 'show')->name('settings');
         Route::post('/settings', 'update')->name('updateSettings');
