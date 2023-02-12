@@ -19,7 +19,7 @@ class MonthlyDataController extends Controller
         $year = $request->input("year");
         $month = $request->input("month");
 
-        if ($year == null || $month == null) { 
+        if ($year == null || $month == null) {
             $year = date("Y");
             $month = date("m");
             $allReserve = Reservation::whereMonth('check_in', $month)->whereYear('check_in', $year)->orderBy('check_in')->get();
@@ -42,17 +42,37 @@ class MonthlyDataController extends Controller
 
     public function update(Request $request)
     {
-        request()->validate([
-            'revenue' => 'required',
+//        dd($request);
+        $data = request()->validate([
+            'guest_first_name'=>'required',
+            'guest_last_name'=> 'required',
+            'email' => 'required',
+            'room' => 'required',
+            'check_in' => 'required',
+            'check_out' => 'required',
         ]);
-
-        $revenue = $request->input("revenue");
+        $firstname = $request->guest_first_name;
+        $lastname = $request->guest_last_name;
+        $email = $request->email;
+        $room = $request->room;
+        $checkin = $request->check_in;
+        $checkout = $request->check_out;
+        $country = $request->country;
+        $unitno = $request->unit_no;
+        $revenue = $request->revenue;
+        $adults = $request->adults;
+        $notes = $request->notes;
+        $children = $request->children;
         $id = $request->input("id");
-
-        $reservation = Reservation::find($id);
-        $reservation->revenue = $revenue;
-        $reservation->save();
-
+        try {
+            $data = ['guest_first_name' => $firstname,'guest_last_name' =>$lastname,'email' => $email,'room' => $room,
+                'check_in' => date('Y-m-d',strtotime($checkin)),'check_out'=>date('Y-m-d',strtotime($checkout)),
+                'country'=>$country,'notes'=>$notes,'unit_no'=>$unitno,'revenue'=>$revenue,'adults'=>$adults,'children'=>$children,
+            ];
+            DB::table('reservation')->where('id',$id)->update($data);
+        }catch (Exception $exception){
+            return back()->with('error',$exception->getMessage());
+        }
         return back()->with('success', 'Monthly data updated successfully');
     }
 }

@@ -102,24 +102,8 @@
                                                                     </td>
                                                                     <td>{{$record->unit_no}}</td>
                                                                     <td>
-                                                                        @if($record->klevio_key == 1 )
-                                                                        <a href="{{route('kleviodisable',$record->id)}}"
-                                                                            class="btn btn-primary"> Disable key</a>
-                                                                        <button class="btn btn-warning editModal"
-                                                                            data-checkin="{{$record->check_in_time}}"
-                                                                            data-checkout="{{$record->check_out_time}}"
-                                                                            data-id="{{$record->id}}"> Edit
-                                                                        </button>
-                                                                        @else
-                                                                        <a href="{{route('klevio',$record->id)}}"
-                                                                            class="btn btn-primary"> Enable key</a>
-                                                                        <button class="btn btn-warning editModal"
-                                                                            data-checkin="{{$record->check_in_time}}"
-                                                                            data-checkout="{{$record->check_out_time}}"
-                                                                            data-id="{{$record->id}}"> Edit
-                                                                        </button>
-                                                                    </td>
-                                                                    @endif
+                                                                        <button  data-disable="{{route('kleviodisable',$record->id)}}" data-kleviokey="{{$record->klevio_key}}" data-enable="{{route('klevio',$record->id)}}" class="btn btn-primary kleviokeybtn tag-{{$record->id}}"
+                                                                            data-id="{{$record->id}}"> @if($record->klevio_key == 1 ) Disable Key @else Enable Key @endif</button>
                                                                     </td>
                                                                 </tr>
                                                                 @endforeach
@@ -390,6 +374,52 @@
 //     });
     
 //   }
+$(document).ajaxStart(function () {
+        $('#preloader').show();
+    }).ajaxStop(function () {
+        $('#preloader').hide();
+    });
+$('.kleviokeybtn').on('click',function(){
+    var id = $(this).attr('data-id');
+    let kleviokey = $(this).attr('data-kleviokey');
+    let url;
+    let setText;
+    let keyint = 0;
+    if(kleviokey == '1'){
+      url = $(this).attr('data-disable');
+    setText = 'Disable Key';
+    keyint = 0;
+    }else{
+         url = $(this).attr('data-enable');
+            keyint = 1;
+         setText = 'Enable Key';
+    }
+    $.ajax({
+      type: "get",
+      method: "get",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+      url: url,
+      data: {
+        id: id,
+      },
+      success: function (data) {
+        data = JSON.parse(data);
+        if(data.error == true){
+            toastr.error(data.message,'Error');
+        }else{
+            toastr.clear();
+            toastr.success("Key enabled successfully.",'Success');
+            $(`.tag-${id}`).text(setText);
+            $(`.tag-${id}`).attr('data-kleviokey',keyint);
+        }
+    },
+      error: function (data) {
+        console.log("Error!");
+      },
+    });    
+});
 
 </script>
 @endpush

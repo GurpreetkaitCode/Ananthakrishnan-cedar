@@ -15,7 +15,12 @@
         <div class="container-fluid">
             <div class="row" style="justify-content: center;">
                 <div class="mapimage">
-                    {!! $calender[0]->calender !!}
+                    @if(is_array($calender) &&  $calender)
+                    @if(array_key_exists(0,$calender))
+                            {!! $calender[0]->calender !!}
+                    @endif
+                    @endif
+
                 </div>
             </div>
         </div>

@@ -78,10 +78,43 @@
       text-decoration: none;
     }
   </style>
+  <style>
+/* ==========================================================================           
+ *
+ *    PRELOADER
+ *
+ * ========================================================================== */
+ #preloader {
+  background-color: rgba(255, 255, 255, 0.7);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  margin-top: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden !important;
+  right: 0;
+  z-index: 999999;
+}
+#preloader img {
+  text-align: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 40%;
+  z-index: 99;
+  margin: 0 auto;
+}
+
+  </style>
   @stack('styles')
 </head>
 
 <body class="hold-transition sidebar-mini">
+  <div id="preloader">
+		<img src="{{asset('uploads/loader.svg')}}" alt="loader">
+	</div>
   <div class="wrapper">
     @if(Session::has('success'))
     <script>
@@ -109,6 +142,18 @@
   <script src="{{asset('js/adminlte.js')}}"></script>
   <script src="{{asset('js/pages/dashboard3.js')}}"></script>
   @stack('scripts')
+  <script>
+   
+	/*===========================================================================
+      *
+      *  PAGE LOADING EFFECT
+      *
+      *============================================================================*/
+	$(window).on("load", function(e) {
+		$("#preloader").delay(0).fadeOut("slow");
+	})
+
+  </script>
 </body>
 
 </html>

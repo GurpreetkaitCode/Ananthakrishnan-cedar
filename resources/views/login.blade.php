@@ -18,16 +18,16 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="https://www.bookinglab.co/assets/global.css" />
-    <title>Login</title>
+    <title>Document</title>
     <style>
         :root {
-    --color-body: #425466;
-    --color-dark: #0A2540;
-    --color-light: #DFE4EA;
-    --color-custom: #425466;
-    --color-primary: #5261F5;
-    --container-padding: 1.5em;
-    }
+  --color-body: #425466;
+  --color-dark: #0A2540;
+  --color-light: #DFE4EA;
+  --color-custom: #425466;
+  --color-primary: #5261F5;
+  --container-padding: 1.5em;
+}
 
 * {
   margin: 0;
@@ -45,7 +45,7 @@ html, body, body > div {
 }
 
 body {
-  background-image: url("/uploads/bg-gradient.svg");
+  background-image: url("/assets/bg-gradient.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -383,43 +383,40 @@ input {
             alt=""
           />
         </div>
-        <form method="POST" action="{{ route('login') }}" class="form">
-            <div class="sign-in-form-wrapper">
-              <div class="sign-in-form">
-                  <div class="form-title">Sign in</div>
-                  @if($errors->any())
-                  @foreach ($errors->all() as $error)
-                  <div class="error" style="color:rgba(255, 0, 0, 0.651);margin-bottom:10px;" >{{$error}}</div>
-                  @endforeach
-                  @endif
-                  <div class="input-group mb-1">
-                      <label>Email address</label>
-                      <input type="text" placeholder="Enter your email address" name="email" :value="old('email')" required autofocus />
-                    </div>
-                @csrf
-        
-                <div class="smart-password-input" data-strengthcheck="disallowed">
-                  <div class="input-group">
-                    <label>Password</label>
-                    <div class="password-input">
-                      <input type="password" placeholder="Enter your password" required name="password"/>
-                      <i class="bi hide-show icon bi-eye"></i>
-                    </div>
-                  </div>
-                  <div class="password-strength-bar">
-                    <div class="password-strength-progress"></div>
-                  </div>
-                </div>
-                <div class="form-footer">
-                  <button class="btn rounded">
-                    Sign in
-                    <i class="bi bi-chevron-right"></i>
-                  </button>
+        <div class="sign-in-form-wrapper">
+          <div class="sign-in-form">
+            <div class="form-title">Sign in</div>
+            <div class="input-group mb-1">
+              <label>Email address</label>
+              <input type="text" placeholder="Enter your email address" />
+            </div>
+
+            <div class="smart-password-input" data-strengthcheck="disallowed">
+              <div class="input-group">
+                <label>Password</label>
+                <div class="password-input">
+                  <input type="password" placeholder="Enter your password" />
+                  <i class="bi hide-show icon bi-eye"></i>
                 </div>
               </div>
+              <div class="password-strength-bar">
+                <div class="password-strength-progress"></div>
+              </div>
+              <div class="password-strength-info">
+                Password strength: <span></span>
+              </div>
             </div>
-        </form>
-    </div>
+            <!-- <a class="reset-pwd-link" href="reset.html">Forgot password?</a> -->
+
+            <div class="form-footer">
+              <button class="btn rounded">
+                Sign in
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="page-content footer-page-content container-px">
         <div class="col footer-col main transparent">
@@ -444,18 +441,21 @@ input {
       </div>
     </div>
 
+    <script src="https://www.bookinglab.co/utils/passStrength.js"></script>
+    <script src="https://www.bookinglab.co/assets/main.js"></script>
+    <script src="https://img1.wsimg.com/traffic-assets/js/tccl.min.js"></script>
   </body>
   
-<script>
-      const smartPwdInputs = [...document.querySelectorAll('.smart-password-input')]
+  <script>
+    const smartPwdInputs = [...document.querySelectorAll('.smart-password-input')]
     smartPwdInputs.forEach(i => createSmartPwdInput(i))
 
 function createSmartPwdInput(el){
     const input = el.querySelector('input')
-    // const progressBar = el.querySelector('.password-strength-bar')
-    // const progress = progressBar.querySelector('.password-strength-progress')
-    // const info = el.querySelector('.password-strength-info')
-    // const pgTextEl =  info.querySelector('span')
+    const progressBar = el.querySelector('.password-strength-bar')
+    const progress = progressBar.querySelector('.password-strength-progress')
+    const info = el.querySelector('.password-strength-info')
+    const pgTextEl =  info.querySelector('span')
     const eyeBtn = el.querySelector('.hide-show')
     const check = el.dataset.strengthcheck
     
